@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html id="ne_wrap"> 
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="model_url" content="${modelUrl}" />
+        <title>test_2</title>
+        <style>
+            .bMain,.bMain2{ border: 1px solid red; height: 100px;  }
+            /*audio{ border: 1px solid red; height: 300px; width: 100%;}*/
+        </style>
+    </head>
+
+    <body>
+        <!-- <audio src="m.mp3" id="au" autoplay="autoplay" controls="controls"></audio> -->
+        <div class="bMain">1</div>
+        <div class="bMain2">2</div>
+
+        <script>
+           /* function AudioGo(btn,ulr){
+                // var attr={
+                //         autoplay:'autoplay'
+                //         controls:'controls'
+                //         loop:'loop'
+                //         muted:'muted'
+                //         preload :'preload'
+                //     }
+
+                var oBj=document.createElement('audio');
+                    oBj.src=ulr;
+                    oBj.autoplay='autoplay';
+                    document.body.appendChild(oBj);
+
+                document.querySelector(btn).addEventListener('click',function(){
+                    if(oBj.paused){
+                        oBj.play()
+                    }else{
+                        oBj.pause()
+                    }
+                })
+            };
+            */
+
+            //背景音乐
+            function AudioGo(btn,ulr,fn){
+                this.fn=fn;
+                this.btn=btn;
+                this.ulr=ulr;
+                this.offon;
+                this.oBj=document.createElement('audio');
+                    this.oBj.src=this.ulr;
+                    this.oBj.autoplay="autoplay";
+                    this.oBj.controls='controls';
+                    this.oBj.loop='loop';
+                    document.body.appendChild(this.oBj);
+                var _this=this;
+                document.querySelector(this.btn).addEventListener('click',function(){
+                    _this.playYN();
+                });
+            };
+            AudioGo.prototype.play=function(){  this.oBj.play(); };
+            AudioGo.prototype.pause=function(){ this.oBj.pause();};
+            AudioGo.prototype.playYN=function(){
+                if(this.oBj.paused){
+                    this.oBj.play();
+                    this.offon='play';
+                    this.fn();
+                }else{
+                    this.oBj.pause();
+                    this.offon='pause';
+                    this.fn();
+                };
+            };
+
+            new AudioGo('.bMain','http://file.ws.126.net/f2e/wine/chongqing2014/files/bg_mp3.mp3',function(){
+                if(this.offon == 'play'){
+                    document.querySelector('.bMain').style.background="";
+                }else{
+                    document.querySelector('.bMain').style.background="red";
+                }
+            });
+            
+            new AudioGo('.bMain2','http://file.ws.126.net/f2e/wine/chongqing2014/files/bg_mp3.mp3',function(){
+                if(this.offon == 'play'){
+                    document.querySelector('.bMain2').style.background="";
+                }else{
+                    document.querySelector('.bMain2').style.background="red";
+                }
+            });
+        </script>
+    </body>
+</html>

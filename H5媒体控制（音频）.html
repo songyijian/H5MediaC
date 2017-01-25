@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>背景音乐</title>
+</head>
+<body>
+	<input type="button" name="" id="toggle" value="toggle" />
+	<input type="button" name="" id="togglesrc" value="切换曲目" />
+	<input type="button" name="" id="remov" value="remov" />
+	
+	<script src="src/H5MediaC.0.1.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var b = new H5MediaC("http://test.go.163.com/go/2016/1223/mp3/qiu_go.mp3",{
+				'attr':{
+					'controls':'',
+					//'autoplay':'autoplay'
+					'loop':'loop'
+				},
+				'elAppend': document.body,
+				'initFn':  function(_this){},
+				'palayFn': function(_this){ console.log(_this.currentTime) },
+				'endFn':  function(_this){
+					console.log('end')
+				},
+				'toggleFn':function(state){
+					console.log(state)
+				}
+		})
+		
+		
+		document.getElementById('toggle').onclick=function(){
+			b.toggle()
+		}
+		document.getElementById('togglesrc').onclick=function(){
+			b.upData({
+				'src':'http://test.go.163.com/go/2016/1223/mp3/get_call.mp3',
+				'controls':'controls',
+				'autoplay':'autoplay',
+				'loop':false,
+				'name':'0000000'
+			})
+		}
+		
+		document.getElementById('remov').onclick=function(){
+			b.remov()
+		}
+	
+	</script>
+
+</body>
+</html>
