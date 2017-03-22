@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>背景音乐</title>
+
+<style type="text/css">
+	div{ width: 50%;border: 1px solid; height: 20px; position: relative;}
+	div p{ background:#007AFF; height: 100%; width: 20%; position: absolute; top: 0; left: 0; margin: 0; padding: 0;}
+	div p span{ color:#FFF;  position: absolute; top: 0; right: 0; padding:0 5px;}
+	
+</style>
+</head>
+<body>
+	<div><p id='gobra'><span>0%</span></p></div>
+	<input type="button" name="" id="toggle" value="toggle" />
+
+	<br />
+
+	<script src="src/H5MediaC.0.3.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vbtn = document.getElementById('toggle');
+		var gobra= document.getElementById('gobra');
+		var brat= gobra.getElementsByTagName('span')[0];
+
+		
+		var vobj=new H5MediaC('http://mobilepics.nosdn.127.net/BkZvwlcZbzFtHdWJQ2tMeWGzbdRDabO1%3D%3DE8DFORUE.mp3',{
+			'attr': {"preload":'auto','controls':'','autoplay':'','loop':false},//json属性设置 value:falsh视为删除该属性  注意默认有preload
+			//'elAppend':, 		//dom 创建的媒体对象插入位置 ，  默认document.body  如果为false不插入
+			'initFn': function(_this){		//init回调
+				console.log('initFn go')
+			},	
+			'pausedFn':function(_this){		//暂停回调
+				//其实这部分完全可以放在toggleFn 里面根据属性去判断
+				console.log('_this 暂停')
+			},	
+			'toggleFn':function(_this){		//toggle 回调直接反映播放和暂停状态
+				if(_this.state){			
+					vbtn.style.color="blue"
+				}else{
+					vbtn.style.color="red"
+				}
+			},	
+			'playFn': function(_this){	//播放回调 ，可以在这里实时获得播放信息  _this.currentTime
+				gobra.style.width=_this.currentTime/_this.duration*100+'%';
+				brat.innerHTML=Math.ceil(_this.duration-_this.currentTime);
+			},	
+			'endFn': function(_this){	//播放完成
+				console.log('播放完成了')
+			}
+	  	})
+		
+		vbtn.onclick=function(){
+			vobj.toggle()
+		}
+	</script>
+
+</body>
+</html>

@@ -1,29 +1,38 @@
 # H5MediaC  H5audio、video基础控件
 
-这个组件现阶段（0.2.0）功能还比较弱，只是根据现在的一些基本业务做了处理，比如：快速创建一个媒体MP4||MP3，精确获取视频播放位置，各种媒体状态回调，拓展了一个toggle（）方法，这在控制背景音乐上有这很好的表现。
+H5MediaC（0.3.0） 现阶段功能较弱
+主要业务场景：1.快速构建H5的媒体文件
+			2.实时检测文件播放进度，播放状态
+			3.媒体播放暂停简易方法的再封装
+		
+
+
 
 这个组件有很广阔的空间，有很多有意思的功能待去扩展，希望有兴趣的朋友参与进来。
 
-## H5MediaC 0.2.0  API
+## H5MediaC 0.3.0  API
 
 ```
-	obj	//* string || dom   如果是 .MP3||.MP4 的路径（src）将自动创建媒体元素 （插入位置 见下面配置）  
+	obj	//* string||dom 
+			.MP3||.MP4 结尾的路径string将自动创建媒体元素，被设置为src属性（插入位置 见下面配置）
+			dom 媒体对象，将被检测
+						
 
 new H5MediaC(obj,{
-	'attr': {"preload":'auto','controls':'','autoplay':'','loop':''},// json 属性设置 value ===falsh视为删除该属性； 注意默认有preload ；
-	'elAppend':document.body , 		//dom 创建的媒体对象插入位置 ，  默认document.body  如果为false不插入
+	'attr': {"preload":'auto','controls':'','autoplay':'','loop':''},//json 属性设置value：falsh视为删除该属性； 默认有preload
+	'elAppend':document.body , 		//dom 创建的媒体对象插入位置， false不插入
 	'initFn': function(_this){},	//init回调
 	'pausedFn':function(_this){},	//暂停回调
-	'toggleFn':function(_this){},	//toggle 方法（事件）回调
-	'playFn': function(_this){},	//播放回调 ，可以在这里实时获得播放信息  _this.currentTime
+	'toggleFn':function(_this){},	//toggle 暂停播放都会被监听到  初始化后紧跟会被执行一次用来判断当前的状态
+	'playFn': function(_this){},	//播放回调 ，实时获得播放信息  _this.currentTime，一秒钟30次
 	'endFn': function(_this){}		//播放完成
   	})
 	  
-	FN	.toggle（） 切换暂停 播放方法
+	FN	.toggle（） 切换 暂停播放
 		.play（）
 		.pause（）
-		.setData（｛xx：x｝）只针对元素属性信息，包括 src设置 ，如果value ===falsh 视为删除该属性
-		.remov() 干掉创建的元素
+		.setData（｛xx：x｝）只针对元素属性信息，包括 src设置 ，value：falsh视为删除该属性
+		.remov() 干掉创建的元素（不推荐试用）
 		
 	Attr
 		data 配置权重最高
