@@ -22,6 +22,7 @@
 	FN	.toggle（） 切换 暂停播放
 		.play（）
 		.pause（）
+		.fullScreen() 全屏（不完美）
 		.setData（｛xx：x｝）只针对元素属性信息，包括 src设置 ，value：falsh视为删除该属性
 		.remov() 干掉创建的元素（不推荐试用）
 		
@@ -32,7 +33,6 @@
 		this.duration;		视频总时长(这个值当元素加载到页面上才会获取)
 		this.state; 		播放状态 （播放时为true）
 		this.paused; 		暂停状态 （暂停时为true） 【是不是觉得有点脑残，为了照顾原生api习惯 多多益善】
-			
 * */
 !function(){
 	function H5MediaC(obj, ajson) {
