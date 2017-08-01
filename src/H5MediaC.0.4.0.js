@@ -1,5 +1,5 @@
 /*
-	H5MediaC 0.3.0  h5多媒体基础操作控件、 支持audio，video
+	H5MediaC 0.4.0  h5多媒体基础操作控件、 支持audio，video
 	作者：songyijian 
 	发布：2017.3.22
 	github：https://github.com/songyijian/H5MediaC
@@ -24,7 +24,8 @@
 			.pause（）
 			.fullScreen() 全屏（不完美）
 			.setData（｛xx：x｝）只针对元素属性信息，包括 src设置 ，value：falsh视为删除该属性
-			.remov() 干掉创建的元素（不推荐试用）
+			.remov() 	暂停播放从dom中删除该元素
+			.append()	将媒体重新插入dom中
 			
 		Attr
 			data 配置权重最高
@@ -79,7 +80,6 @@
 		this.fullScreenFlag = false;
 	
 		this.init();
-		alert(1)
 		return this;
 	};
 	
@@ -104,27 +104,27 @@
 		} else {
 			return;
 		}
-		
 
+		var _this = this;
 		//属性设置
 		this.setData(this.data.attr,function(){
-			if(this.type && this.type === "create") {
-				if(!this.data.elAppend && typeof this.data.elAppend === 'boolean' && this.data.elAppend === false ){
+			if(_this.type && _this.type === "create") {
+				if(!_this.data.elAppend && typeof _this.data.elAppend === 'boolean' && _this.data.elAppend === false ){
 				}else{
-					this.data.elAppend.appendChild(this.el);
+					_this.append()
 				}
 			}
-			this.state = this.el.autoplay ? true : false; 			//播放时为true
-			this.paused = this.el.autoplay ? false : true; 			//暂停时为true
-
-			console.log(this.el.autoplay)
-			this.data.initFn(this);
-			this.data.toggleFn(this);
+			if(_this.el.autoplay){
+				document.addEventListener("WeixinJSBridgeReady", function (){_this.play();}, false);  
+			    document.addEventListener('YixinJSBridgeReady', function(){ _this.play();}, false);
+			}
+			_this.state = _this.el.autoplay ? true : false; 			//播放时为true
+			_this.paused = _this.el.autoplay ? false : true; 			//暂停时为true
+			_this.data.initFn(_this);
+			_this.data.toggleFn(_this);
 		});
 
-
 		//Event
-		var _this = this;
 		this.el.addEventListener('play', function() {
 			_this.paused = _this.el.paused;
 			_this.state = !_this.el.paused;
@@ -151,8 +151,8 @@
 		
 		
 		//当媒介长度改变时运行的脚本
-		this.el.ondurationchange=function(){ _this.duration = _this.el.duration; }	//1
-		this.el.onloadeddata=function(){}	//2
+		this.el.addEventListener('ondurationchange',function(){ _this.duration = _this.el.duration; })	//1
+		this.el.addEventListener('onloadeddata',function(){ })	//1
 		
 		return this;
 	};
@@ -166,7 +166,6 @@
 			var key = '';
 			for(var i in this.data.attr) {
 				if(this.data.attr.hasOwnProperty(i)) key = i;
-				
 				if( typeof this.data.attr[key]==="boolean" && this.data.attr[key]===false){
 					if(this.el.getAttribute(key)!==null){
 						this.el.removeAttribute(key);
@@ -179,11 +178,11 @@
 			//参数重载
 			if( arguments.length > 1 ){
 				if(arguments.length === 2){
-					if(typeof currentTime !=='function' &&  typeof currentTime === 'number'){
+					if(typeof currentTime === 'number'){
 						this.currentTime = currentTime;
 						return this;
 					}
-					if(typeof currentTime !=='function'){
+					if(typeof currentTime ==='function'){
 						currentTime(this);
 						return this;					
 					}
@@ -196,6 +195,7 @@
 						fn(this)
 					}
 				}
+				return this;
 			}
 		}else{
 			console.error("Data arguments error")
@@ -253,13 +253,26 @@
     }
 	
 	//非常不完美
-	H5MediaC.prototype.remov = function() {
+	H5MediaC.prototype.remov = function(fn) {
 		if(this.el) {
+			this.el.pause()
 			this.data.elAppend.removeChild(this.el);
-			this.el=null
+			// this.el=null
+			if(fn)fn(this)
 		}
 		return this;
 	}
+
+	//非常不完美
+	H5MediaC.prototype.append = function(fn) {
+		if(this.el) {
+			this.data.elAppend.appendChild(this.el);
+			if(fn)fn(this)
+		}
+		return this;
+	}
+
+
 
 	window.H5MediaC = H5MediaC;
 }()
