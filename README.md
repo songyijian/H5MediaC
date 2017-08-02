@@ -1,12 +1,12 @@
-# H5MediaC（0.4.1）  H5 audio、video基础控件
+# H5MediaC（0.4.2）  H5 audio、video基础控件
 
-推荐使用最新版本 0.4.1
+推荐使用最新版本 0.4.2
 gitHub : https://github.com/songyijian/H5MediaC
 
 
-更新内容：修改前面版本的bug
-		增加媒体文件在dom中的操作方法 .remov()、.append()
-		支持微信端的媒体自动播放, 精确反省媒体播放状态：this.paused || this.state 
+更新内容： 修改前面版本的bug
+			增加媒体文件在dom中的操作方法 .remov()、.append()
+			支持微信端的媒体自动播放, 精确反省媒体播放状态：this.paused || this.state 
 
 
 ### 主要业务场景：
